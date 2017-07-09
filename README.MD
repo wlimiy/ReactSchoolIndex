@@ -2,10 +2,10 @@
 ==
 开发项目流程
 --
-###初始化项目文件夹
+### 初始化项目文件夹
 >npm init
 
-###安装项目依赖
+### 安装项目依赖
 
 * react技术栈
 >sudo npm install react react-dom redux react-redux react-router-dom react-router-redux -D
@@ -73,34 +73,24 @@ node_modules
 ### container 主要是放置页面级文件夹
 ### components 主要是放置组件文件夹
 ### common 主要是放置公共文件夹
-## 路由切换
-- 访问/home 显示首页组件
-- 访问/lesson 显示课程页面
-- 访问/profile 显示课程中心
-
-## homeHeader
-- 将当前点击的课程存到redux中，在页面加载时获取redux中的当前课程进行读取数据
-## 项目应用知识点
-- react-router-dom
-    - HashRouter
-    - browserRouter
-    - Switch
-- flex
+### 实现HomeHeader
+- 利用state控制状态
 ```
-flex-direction:column
-    伸缩流方向：row:默认从左向右排列 column:从上到下排列
-
-justify-content:space-between
-    主轴对齐：space-between:第一个伸缩项目在一行中最开始位置，第二个伸缩项目在一行中最终点位置
-
-align-items:center
-    侧轴对齐：调整伸缩项目在侧轴上的定位方式，居中对齐
-    
+constructor(){
+    super();
+    this.state={
+        isShow:false
+    }
+}
+changeShow(){
+    this.setState({
+        isShow:!this.state.isShow
+    })
+}
 ```
 - react-addons-css-transition-group实现动画效果
-```
 https://facebook.github.io/react/docs/animation.html
-
+```
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'; // ES6
 
         <ReactCSSTransitionGroup
@@ -129,6 +119,70 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'; // ES6
 }
         
 ```
+### 实现底部导航切换
+containers>App.js
+这个组件 主要是显示所有页面用的
+components>Tab
+```
+
+```
+main.js
+- react-router-dom<br/>
+https://reacttraining.com/react-router/
+```
+import {
+    HashRouter as Router,//容器
+    Route//一条路由
+} from 'react-router-dom';
+
+<Router>
+    <div>
+    <Route path="/" component={Root}/>
+    <Route path="/home" component={Home}/>
+    <Route path="/User" component={User}/>
+    <Route path="/Profile" component={Profile}/>
+    </div>
+</Router>
+```
+
+>路由切换
+- 访问/home 显示首页组件
+- 访问/lesson 显示课程页面
+- 访问/profile 显示课程中心
+### 实现轮播图
+- react-swipe实现轮播图效果插件
+https://github.com/voronianski/react-swipe
+```
+import ReactSwipe from 'react-swipe';
+<ReactSwipe className="carousel" swipeOptions={{continuous: false}}>
+                <div>PANE 1</div>
+                <div>PANE 2</div>
+                <div>PANE 3</div>
+</ReactSwipe>
+```
+- sliders要通过ajax请求数据，通过action请求数据，请求成功后派发对应的reducers
+
+
+## homeHeader
+- 将当前点击的课程存到redux中，在页面加载时获取redux中的当前课程进行读取数据
+## 项目应用知识点
+- react-router-dom
+    - HashRouter
+    - browserRouter
+    - Switch
+- flex
+```
+flex-direction:column
+    伸缩流方向：row:默认从左向右排列 column:从上到下排列
+
+justify-content:space-between
+    主轴对齐：space-between:第一个伸缩项目在一行中最开始位置，第二个伸缩项目在一行中最终点位置
+
+align-items:center
+    侧轴对齐：调整伸缩项目在侧轴上的定位方式，居中对齐
+    
+```
+
 - react-router-redux
 - redux-thunk
 - history/createHashHistory
@@ -136,15 +190,11 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'; // ES6
 - 对象解析赋值
 - fetch
 - koa
-
-Webpack了解
---
-什么是WebPack？
->WebPack可以看做是模块打包机，它做的事件是：分析你的项目结构，找到JavaScript模块以及它的一些浏览器不能直接运行的拓展语言，并将其打包为合适的格式以供浏览器使用。
-
-Webpack安装
->sudo npm install webpack -S
-
-flex了解
---
+- Webpack了解
+    
+    什么是WebPack？
+    >WebPack可以看做是模块打包机，它做的事件是：分析你的项目结构，找到JavaScript模块以及它的一些浏览器不能直接运行的拓展语言，并将其打包为合适的格式以供浏览器使用。
+    
+    Webpack安装
+    >sudo npm install webpack -S
 
