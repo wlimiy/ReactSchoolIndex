@@ -1,9 +1,12 @@
-##基于React开发腾讯课堂首页
-
-##开发项目流程
+基于React开发腾讯课堂首页
+==
+开发项目流程
+--
 ###初始化项目文件夹
 >npm init
+
 ###安装项目依赖
+
 * react技术栈
 >sudo npm install react react-dom redux react-redux react-router-dom react-router-redux -D
 * webpack
@@ -21,10 +24,12 @@
 * koa
 >sudo npm install koa koa-router koa-cors  koa-bodyparser nodemon -D
 
-###建立src文件夹
+### 建立src文件夹
+
     main.js
     index.html
-###webpack.config.js
+    
+### webpack.config.js
 ```
 let path=require('path');
 let HtmlWebpackPlugin=require('html-webpack-plugin');//这个插件的作用是依据一个简单的模板，帮你生成最终的Html5文件
@@ -49,7 +54,7 @@ module.exports={
     ]
 };
 ```
-###.babelrc
+### .babelrc
 >这个文件是用来设置转码的规则和插件的
 ```
 {
@@ -59,16 +64,15 @@ module.exports={
 presets 字段是用来设定转码规则
 ```
 
-###.gitignore
+### .gitignore
 ```
 node_modules
 .idea
 .DS_Store
 ```
-
-
 ### container 主要是放置页面级文件夹
-
+### components 主要是放置组件文件夹
+### common 主要是放置公共文件夹
 ## 路由切换
 - 访问/home 显示首页组件
 - 访问/lesson 显示课程页面
@@ -82,7 +86,49 @@ node_modules
     - browserRouter
     - Switch
 - flex
+```
+flex-direction:column
+    伸缩流方向：row:默认从左向右排列 column:从上到下排列
+
+justify-content:space-between
+    主轴对齐：space-between:第一个伸缩项目在一行中最开始位置，第二个伸缩项目在一行中最终点位置
+
+align-items:center
+    侧轴对齐：调整伸缩项目在侧轴上的定位方式，居中对齐
+    
+```
 - react-addons-css-transition-group实现动画效果
+```
+https://facebook.github.io/react/docs/animation.html
+
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'; // ES6
+
+        <ReactCSSTransitionGroup
+          transitionName="example"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+          {items}
+        </ReactCSSTransitionGroup>
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+        
+```
 - react-router-redux
 - redux-thunk
 - history/createHashHistory
@@ -98,3 +144,7 @@ Webpack了解
 
 Webpack安装
 >sudo npm install webpack -S
+
+flex了解
+--
+
