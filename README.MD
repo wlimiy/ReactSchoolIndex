@@ -1,4 +1,4 @@
-基于React开发腾讯课堂首页
+基于React开发在线课堂首页
 ==
 开发项目流程
 --
@@ -24,10 +24,18 @@
 * koa
 >sudo npm install koa koa-router koa-cors  koa-bodyparser nodemon -D
 
-### 建立src文件夹
+项目启动
 
+npm start
+### 建立src文件夹
     main.js
+        import React,{Component} from 'react';
+        import {render} from 'react-dom';
+        render(
+            <h1>Hello World</h1>,document.getElementById('app')
+        );
     index.html
+        <div id="app"></div>
     
 ### webpack.config.js
 ```
@@ -70,9 +78,69 @@ node_modules
 .idea
 .DS_Store
 ```
+### common 主要放公共文件
+    css
+        index.less
+     images
+        logo.jpg
 ### container 主要是放置页面级文件夹
+App.js
+```
+    //这个组件是用来显示所有页面用的
+    import React,{Component} from 'react';
+    export default class Home extends Component{
+        render(){
+            return(
+                <div>
+                    {this.props.children}
+                </div>
+            )
+        }
+    }
+```
+Home
+
+    index.js
+Lesson
+
+    index.js
+
+Profile
+    
+    index.js
+    
 ### components 主要是放置组件文件夹
-### common 主要是放置公共文件夹
+
+HomeHeader文件夹
+    
+    index.js
+    index.less
+Tab文件夹
+
+* 路由切换
+    * 访问/home 显示首页组件
+    * 访问/lesson 显示课程组件
+    * 访问/profile 显示个人中心组件
+
+    index.js
+    index.less
+    
+Home文件夹
+
+    index.js
+
+    import React,{Component} from 'react';
+    export default class Home extends Component{
+        render(){
+            return (
+                <div>
+                    Home
+                </div>
+            )
+        }
+    }
+
+
 ### 实现HomeHeader
 - 利用state控制状态
 ```
@@ -123,9 +191,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'; // ES6
 containers>App.js
 这个组件 主要是显示所有页面用的
 components>Tab
-```
 
-```
 main.js
 - react-router-dom<br/>
 https://reacttraining.com/react-router/
@@ -149,6 +215,74 @@ import {
 - 访问/home 显示首页组件
 - 访问/lesson 显示课程页面
 - 访问/profile 显示课程中心
+
+### 应用redux实现状态管理
+
+创建redux文件夹：src/redux
+
+    - action-types
+        index.js
+            //index文件，存放所有的动作名
+            //更改当前课程
+            export const SET_CURRENT_LESSON = 'SET_CURRENT_LESSON';
+    - actions
+        home.js
+            //首页动作
+            //放一些action-creater函数返回action
+            import * as Types from '../action-types'
+            export const setCurrentLesson=(lesson)=>{
+                return {
+                    type:Types.SET_CURRENT_LESSON,
+                    lesson
+                }
+            };
+    - store
+        index.js
+            import {createStore} from 'redux';
+            import reducers from '../reducers';//将合并后的reducer插入到store中
+            export default createStore(reducers);
+    - reducers   
+        home.js
+            import * as Types from '../action-types';
+            let initState={
+              currentLesson:'all'  
+            };
+            export function home(state=initState,action) {
+                switch (action.type){
+                    case Types.SET_CURRENT_LESSON:
+                        return {...state,...{currentLesson:action.lesson}}
+                }
+                return initState;
+            }
+        index.js
+            //导出合并后的reducer
+            import {combineReducers} from 'redux';
+            import {home} from './home';
+            export default combineReducers({
+                home
+            })
+```
+src/main.js
+        引入store
+            import {Provider} from 'react-redux';
+            import store from './redux/store';
+            window._store=store;//将store挂在window上，store有个getState()方法，可以获取状态
+
+            ReactDOM.render(
+                <Provider store={store}>
+                <Router>
+                    <App>
+                        <Switch>
+                            <Route path="/home" component={Home}/>
+                            <Route path="/lesson" component={Lesson}/>
+                            <Route path="/profile" component={Profile}/>
+                            <Redirect to="/home"/>
+                        </Switch>
+                    </App>
+                </Router>
+                </Provider>,document.querySelector('#app')
+            );
+```    
 ### 实现轮播图
 - react-swipe实现轮播图效果插件
 https://github.com/voronianski/react-swipe
@@ -182,13 +316,34 @@ align-items:center
     侧轴对齐：调整伸缩项目在侧轴上的定位方式，居中对齐
     
 ```
-
+- redux
+- react-redux
 - react-router-redux
 - redux-thunk
 - history/createHashHistory
 - 函数解构赋值
 - 对象解析赋值
 - fetch
+```
+使用fetch代替ajax发送数据实践（node+webpack）--whatwg-fetch 
+1、安装whatwg-fetch(和ajax一样，新的获取数据方式,支持promise语法)获取数据。安装方法：
+    npm install whatwg-fetch --save; 
+2、导入依赖。注意这里的导入只能使用**import 'whatwg-fetch';**接着是发送xhr请求的代码，我们将其封装成一个方法，如下
+    function myFetch(Url){
+        fetch(Url)
+            .then(function(response) {
+                console.log(response);
+                return response.text();
+            })
+            .then((data) => {
+                console.log(data);
+            }).catch(e=>{console.log(e);})
+    }
+3. 接着将其暴露出去，给其他js文件引用。module.exports = myFetch;
+4. 定义另一个index.js文件，代码如下：
+    import myFetch from './index6'
+    myFetch("http://localhost:3000/users");
+```
 - koa
 - Webpack了解
     
