@@ -282,7 +282,8 @@ src/main.js
                 </Router>
                 </Provider>,document.querySelector('#app')
             );
-```    
+``` 
+### 首页导航激活状态
 ### 实现轮播图
 - react-swipe实现轮播图效果插件
 https://github.com/voronianski/react-swipe

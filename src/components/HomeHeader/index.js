@@ -14,6 +14,12 @@ export default class HomeHeader extends Component{
             isShow:!this.state.isShow
         })
     }
+    choose(e){
+        //调用父组件传递的函数
+        this.props.choose(e.target.innerText);
+        //关闭下拉菜单
+        this.changeShow();
+    }
     render(){
         let {isShow}=this.state;
         return(
@@ -22,7 +28,7 @@ export default class HomeHeader extends Component{
                     <img src={logoImg} alt=""/>
                     <div onClick={this.changeShow.bind(this)}>
                         {
-                            isShow?                        <i className="iconfont icon-close"></i>:
+                            isShow?<i className="iconfont icon-close"></i>:
                                 <i className="iconfont icon-category"></i>
                         }
                     </div>
@@ -33,7 +39,7 @@ export default class HomeHeader extends Component{
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={300}>
                     {
-                        isShow?<ul>
+                        isShow?<ul onClick={this.choose.bind(this)}>
                             <li>Node课程培训</li>
                             <li>HTML课程培训</li>
                             <li>视频课程</li>
